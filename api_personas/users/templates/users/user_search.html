@@ -1,0 +1,52 @@
+{% extends 'users/base.html' %}
+
+{% block title %}Búsqueda de Usuarios - Usuarios Aleatorios{% endblock %}
+
+{% block header_title %}Resultados de Búsqueda{% endblock %}
+
+{% block content %}
+{% if query %}
+<div class="user-card" style="margin-bottom: 30px;">
+    <h3 style="color: #45b7d1; margin-bottom: 20px; text-align: center;">
+        Resultados para: "{{ query }}"
+    </h3>
+    <p style="text-align: center; color: rgba(224, 224, 224, 0.7);">
+        Se encontraron {{ users|length }} usuario{{ users|length|pluralize }}
+    </p>
+</div>
+{% endif %}
+
+<div class="user-grid">
+    {% for user in users %}
+    <div class="user-card">
+        <a href="{% url 'user_detail' user.uuid %}" style="text-decoration: none; color: inherit;">
+            <div class="user-image">
+                {% if user.picture and user.picture.medium %}
+                    <img src="{{ user.picture.medium }}" alt="{{ user.full_name }}" loading="lazy">
+                {% else %}
+                    <span>👤</span>
+                {% endif %}
+            </div>
+            <div class="user-name">{{ user.full_name }}</div>
+            <div class="user-info">{{ user.email }}</div>
+            <div class="user-info">{{ user.location }}</div>
+            <div class="user-info">{{ user.age }} años • {{ user.gender|title }}</div>
+        </a>
+    </div>
+    {% empty %}
+    <div class="no-users">
+        {% if query %}
+            <p>No se encontraron usuarios que coincidan con "{{ query }}".</p>
+            <a href="{% url 'user_search' %}" class="btn btn-secondary" style="margin-top: 20px;">
+                Nueva Búsqueda
+            </a>
+        {% else %}
+            <p>Ingresa un término de búsqueda para encontrar usuarios.</p>
+        {% endif %}
+        <a href="{% url 'user_list' %}" class="btn btn-success" style="margin-top: 10px;">
+            Ver Todos los Usuarios
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
