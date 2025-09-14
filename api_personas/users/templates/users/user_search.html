@@ -7,10 +7,10 @@
 {% block content %}
 {% if query %}
 <div class="user-card" style="margin-bottom: 30px;">
-    <h3 style="color: #45b7d1; margin-bottom: 20px; text-align: center;">
+    <h3 style="color: #333; margin-bottom: 20px; text-align: center;">
         Resultados para: "{{ query }}"
     </h3>
-    <p style="text-align: center; color: rgba(224, 224, 224, 0.7);">
+    <p style="text-align: center; color: #666;">
         Se encontraron {{ users|length }} usuario{{ users|length|pluralize }}
     </p>
 </div>
@@ -19,25 +19,25 @@
 <div class="user-grid">
     {% for user in users %}
     <div class="user-card">
-        <a href="{% url 'user_detail' user.uuid %}" style="text-decoration: none; color: inherit;">
+        <a href="{% url 'user_detail' user.login.uuid %}" style="text-decoration: none; color: inherit;">
             <div class="user-image">
-                {% if user.picture and user.picture.medium %}
-                    <img src="{{ user.picture.medium }}" alt="{{ user.full_name }}" loading="lazy">
+                {% if user.picture.medium %}
+                    <img src="{{ user.picture.medium }}" alt="{{ user.name.first }} {{ user.name.last }}" loading="lazy">
                 {% else %}
                     <span>👤</span>
                 {% endif %}
             </div>
-            <div class="user-name">{{ user.full_name }}</div>
+            <div class="user-name">{{ user.name.first|title }} {{ user.name.last|title }}</div>
             <div class="user-info">{{ user.email }}</div>
-            <div class="user-info">{{ user.location }}</div>
-            <div class="user-info">{{ user.age }} años • {{ user.gender|title }}</div>
+            <div class="user-info">{{ user.location.city|title }}, {{ user.location.country|title }}</div>
+            <div class="user-info">{{ user.dob.age }} años • {{ user.gender|title }}</div>
         </a>
     </div>
     {% empty %}
     <div class="no-users">
         {% if query %}
             <p>No se encontraron usuarios que coincidan con "{{ query }}".</p>
-            <a href="{% url 'user_search' %}" class="btn btn-secondary" style="margin-top: 20px;">
+            <a href="{% url 'user_search' %}" class="btn btn-primary" style="margin-top: 20px;">
                 Nueva Búsqueda
             </a>
         {% else %}

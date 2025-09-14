@@ -1,6 +1,6 @@
-{% extends 'pokemons/base.html' %}
+{% extends 'users/base.html' %}
 
-{% block title %}{{ user.full_name }} - Usuarios Aleatorios{% endblock %}
+{% block title %}{{ user.name.first|title }} {{ user.name.last|title }} - Usuarios Aleatorios{% endblock %}
 
 {% block header_title %}Detalle del Usuario{% endblock %}
 
@@ -8,24 +8,24 @@
 <div class="user-detail-card">
     <div style="text-align: center;">
         <div class="user-detail-image">
-            {% if user.picture and user.picture.large %}
-                <img src="{{ user.picture.large }}" alt="{{ user.full_name }}" loading="lazy">
+            {% if user.picture.large %}
+                <img src="{{ user.picture.large }}" alt="{{ user.name.first }} {{ user.name.last }}" loading="lazy">
             {% else %}
                 <span>👤</span>
             {% endif %}
         </div>
-        <h2 style="color: #4ecdc4; margin-bottom: 10px;">{{ user.full_name }}</h2>
-        <p style="color: rgba(224, 224, 224, 0.7); margin-bottom: 30px;">{{ user.email }}</p>
+        <h2 style="color: #333; margin-bottom: 10px;">{{ user.name.first|title }} {{ user.name.last|title }}</h2>
+        <p style="color: #666; margin-bottom: 30px;">{{ user.email }}</p>
     </div>
 
     <div class="info-grid">
         <div class="info-item">
             <div class="info-label">Información Personal</div>
             <div class="info-value">
-                <strong>Nombre:</strong> {{ user.first_name }} {{ user.last_name }}<br>
-                <strong>Edad:</strong> {{ user.age }} años<br>
+                <strong>Nombre:</strong> {{ user.name.first|title }} {{ user.name.last|title }}<br>
+                <strong>Edad:</strong> {{ user.dob.age }} años<br>
                 <strong>Género:</strong> {{ user.gender|title }}<br>
-                <strong>Nacionalidad:</strong> {{ user.nationality|upper }}
+                <strong>Nacionalidad:</strong> {{ user.nat|upper }}
             </div>
         </div>
 
@@ -41,59 +41,26 @@
         <div class="info-item">
             <div class="info-label">Ubicación</div>
             <div class="info-value">
-                {% if user.street_name and user.street_number %}
-                    <strong>Dirección:</strong> {{ user.street_number }} {{ user.street_name }}<br>
-                {% endif %}
-                {% if user.city %}<strong>Ciudad:</strong> {{ user.city }}<br>{% endif %}
-                {% if user.state %}<strong>Estado:</strong> {{ user.state }}<br>{% endif %}
-                {% if user.country %}<strong>País:</strong> {{ user.country }}<br>{% endif %}
-                {% if user.postcode %}<strong>Código Postal:</strong> {{ user.postcode }}<br>{% endif %}
+                <strong>Dirección:</strong> {{ user.location.street.number }} {{ user.location.street.name }}<br>
+                <strong>Ciudad:</strong> {{ user.location.city|title }}<br>
+                <strong>Estado:</strong> {{ user.location.state|title }}<br>
+                <strong>País:</strong> {{ user.location.country|title }}<br>
+                <strong>Código Postal:</strong> {{ user.location.postcode }}
             </div>
         </div>
 
         <div class="info-item">
             <div class="info-label">Fechas</div>
             <div class="info-value">
-                {% if user.date_of_birth %}
-                    <strong>Fecha de Nacimiento:</strong> {{ user.date_of_birth|date:"d/m/Y" }}<br>
-                {% endif %}
-                {% if user.registered_date %}
-                    <strong>Registrado:</strong> {{ user.registered_date|date:"d/m/Y" }}<br>
-                {% endif %}
-                <strong>Usuario:</strong> {{ user.username }}
+                <strong>Fecha de Nacimiento:</strong> {{ user.dob.date|date:"d/m/Y" }}<br>
+                <strong>Registrado:</strong> {{ user.registered.date|date:"d/m/Y" }}<br>
+                <strong>Usuario:</strong> {{ user.login.username }}
             </div>
         </div>
     </div>
-
-    <!-- Imágenes disponibles -->
-    {% if user.picture %}
-    <div style="margin-top: 30px;">
-        <h3 style="color: #45b7d1; margin-bottom: 20px; text-align: center;">Imágenes Disponibles</h3>
-        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-            {% if user.picture.thumbnail %}
-            <div style="text-align: center;">
-                <img src="{{ user.picture.thumbnail }}" alt="Thumbnail" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                <p style="color: rgba(224, 224, 224, 0.7); font-size: 0.9rem;">Thumbnail</p>
-            </div>
-            {% endif %}
-            {% if user.picture.medium %}
-            <div style="text-align: center;">
-                <img src="{{ user.picture.medium }}" alt="Medium" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                <p style="color: rgba(224, 224, 224, 0.7); font-size: 0.9rem;">Medium</p>
-            </div>
-            {% endif %}
-            {% if user.picture.large %}
-            <div style="text-align: center;">
-                <img src="{{ user.picture.large }}" alt="Large" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 10px;">
-                <p style="color: rgba(224, 224, 224, 0.7); font-size: 0.9rem;">Large</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-    {% endif %}
 
     <div style="text-align: center; margin-top: 30px;">
-        <a href="{% url 'user_list' %}" class="btn btn-secondary">← Volver a la Lista</a>
+        <a href="{% url 'user_list' %}" class="btn btn-primary">← Volver a la Lista</a>
     </div>
 </div>
 {% endblock %}
